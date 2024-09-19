@@ -7,7 +7,11 @@ pipeline{
     environment{
         
         registry = "kamlish/python"
-        registryCredential = 'dockerhub'        
+        registryCredential = 'dockerhub'
+        AZURE_SUBSCRIPTION_ID = 'd39bc4d6-74d2-4bac-8e37-30ff241be87f'
+        AZURE_CLIENT_ID = '85744930-fdec-4851-a932-17920dea0842'
+        AZURE_CLIENT_SECRET = 'Vmr8Q~AvC1MjsEiHVOhuPBFHycH.m5j8aOY5UaEk'
+        AZURE_TENANT_ID = '29c02d35-e56f-403a-b317-07fb2ca35864'
     }
     
     stages{
@@ -27,5 +31,26 @@ pipeline{
         }
       }
     }
+
+        stage('Login to Azure') {
+            steps {
+                sh '''
+                az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}
+                az account set --subscription ${AZURE_SUBSCRIPTION_ID}
+                '''
+            }
+        }
+    stage('Get AKS Credentials') {
+            steps {
+                sh '''
+                az aks get-credentials --resource-group devopstask --name devopstask
+                helm ls
+                '''
+            }
+        }
+
 }
 }
+
+
+        
