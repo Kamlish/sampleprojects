@@ -6,7 +6,7 @@ pipeline{
     }
     environment{
         
-        registry = "deepikadeevops/myfristproject"
+        registry = "kamlish/python"
         registryCredential = 'dockerhub'        
     }
     
